@@ -47,6 +47,7 @@ do {
         // Remove from array
         unset($items[$key]);
     }
+	$items = array_values($items);
 // Exit when input is (Q)uit or (q)uit
 } while ($input != 'Q' && $input != 'q');
 
