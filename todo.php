@@ -20,6 +20,7 @@ do {
     // Iterate through list items
     foreach ($items as $key => $item) {
         // Display each item and a newline
+        $key = $key + 1; //add 1 to start array at 1
         echo "[{$key}] {$item}\n";
     }
 
@@ -31,21 +32,23 @@ do {
     $input = trim(fgets(STDIN));
 
     // Check for actionable input
-    if ($input == 'N') {
+    if ($input == 'N' || $input == 'n') {
         // Ask for entry
         echo 'Enter item: ';
         // Add entry to list array
         $items[] = trim(fgets(STDIN));
-    } elseif ($input == 'R') {
+    } elseif ($input == 'R' || $input == 'r') {
+    	//echo 'key is ' . $key . PHP_EOL;
         // Remove which item?
         echo 'Enter item number to remove: ';
         // Get array key
         $key = trim(fgets(STDIN));
+        $key = $key - 1; //fix key by subtracting 1
         // Remove from array
         unset($items[$key]);
     }
-// Exit when input is (Q)uit
-} while ($input != 'Q');
+// Exit when input is (Q)uit or (q)uit
+} while ($input != 'Q' && $input != 'q');
 
 // Say Goodbye!
 echo "Goodbye!\n";
