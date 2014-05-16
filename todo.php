@@ -12,6 +12,7 @@ Update the code to allow upper and lowercase inputs from user for all menu items
 
 Update the program to start numbering the list with 1 instead of 0. Make sure remove still works as expected.
 */
+
 // Create array to hold list of todo items
 $items = array();
 
@@ -19,8 +20,7 @@ $items = array();
 function list_items($list){
     $result = '';
     foreach ($list as $key => $item) {
-        $key = $key + 1; // add one to the key
-        $result .= '[' . $key .'] '. $item . PHP_EOL;
+        $result .= '[' . ($key + 1) .'] '. $item . PHP_EOL;
     } //end of foreach
 
     return $result;
@@ -60,12 +60,11 @@ do {
         echo 'Enter item number to remove: ';
         // Get array key
         //$key = trim(fgets(STDIN));
-        $key = get_input(TRUE);
-        $key = $key - 1; //fix key by subtracting 1
+        $key = get_input();
         // Remove from array
-        unset($items[$key]);
+        unset($items[$key - 1]);
     }
-	$items = array_values($items);
+	$items = array_values($items);//reset keys to clean up indexes
 // Exit when input is (Q)uit or (q)uit
 } while ($input != 'Q');
 
