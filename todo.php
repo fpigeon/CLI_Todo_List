@@ -11,10 +11,41 @@ After each exercise item, commit and push changes to your GitHub repository.
 Update the code to allow upper and lowercase inputs from user for all menu items. Test adding, removing, and quitting.
 
 Update the program to start numbering the list with 1 instead of 0. Make sure remove still works as expected.
+
+WEEK 3
+1) Open your todo.php file for editing. Commit changes and push to GitHub for each step.
+
+2) Add a (S)ort option to your menu. When it is chosen, it should call a function called sort_menu().
+
+3) When sort menu is opened, show the following options "(A)-Z, (Z)-A, (O)rder entered, (R)everse order entered".
+
+4) When a sort type is selected, order the TODO list accordingly and display the results.
 */
 
 // Create array to hold list of todo items
 $items = array();
+
+function sort_menu($array) {
+    echo "(A)-Z, (Z)-A, (O)rder entered, (R)everse order entered: ";
+    $input = get_input(TRUE); //capture input and UPPERCASE IT
+
+    if ($input == 'A'){
+        asort($array);
+    }//end of alphabetic
+    elseif ($input == 'Z'){
+        arsort($array);
+    }//end of reverse alphabetic
+    elseif ($input == 'O'){
+        ksort($array);
+    }//end of order entered
+    elseif ($input == 'R'){
+        krsort($array);
+    }//end of reverse order entered
+    return $array;
+    //display new array
+    //print_r($array);
+    //list_items($array);
+}// end of sort_menu
 
 // List array items formatted for CLI
 function list_items($list){
@@ -37,11 +68,11 @@ function get_input($upper = FALSE)
 // The loop!
 do {
     // Iterate through list items
-     //$key = $key + 1;
-     echo list_items($items); //NEW    
+    //$key = $key + 1;
+    echo list_items($items); //NEW    
 
     // Show the menu options
-    echo '(N)ew item, (R)emove item, (Q)uit : ';
+    echo '(N)ew item, (R)emove item, (S)ort, (Q)uit : ';
 
     // Get the input from user
     // Use trim() to remove whitespace and newlines
@@ -64,7 +95,12 @@ do {
         // Remove from array
         unset($items[$key - 1]);
     }
-	$items = array_values($items);//reset keys to clean up indexes
+    elseif ($input == 'S') {
+        $items = sort_menu($items);
+        // print_r($newsort);
+        // echo list_items($items);
+    }
+	$items = array_values($items);//reset keys to clean up indexes    
 // Exit when input is (Q)uit or (q)uit
 } while ($input != 'Q');
 
