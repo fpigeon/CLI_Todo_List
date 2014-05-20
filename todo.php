@@ -108,10 +108,18 @@ do {
         $key = get_input();
         // Remove from array
         unset($items[$key - 1]);
-    }
+    } //end of remove item
     elseif ($input == 'S') {
         $items = sort_menu($items);
     } //end of sort
+    elseif ($input == 'F') {
+        array_shift($items); //remove first index in array
+    } //end of power user delete first array item
+
+    elseif ($input == 'L') {
+        array_pop($items); //removes last itemin array
+    } //end of power user delete last array item
+
 	
 // Exit when input is (Q)uit or (q)uit
 } while ($input != 'Q');
