@@ -4,7 +4,9 @@ CodeUp Day 6
 Dev: Frank Pigeon
 Date: May 13 2014
 Description:
-Create a new directory in your vagrant-lamp directory named todo_list with a file named todo.php containing the code above. Use git init to initialize a new local repository in that directory and commit your code. Create a new remote repository on GitHub called CLI_Todo_List and add the remote to your local repository so you can push your code.
+Create a new directory in your vagrant-lamp directory named todo_list with a file named todo.php containing the code above.
+Use git init to initialize a new local repository in that directory and commit your code.
+Create a new remote repository on GitHub called CLI_Todo_List and add the remote to your local repository so you can push your code.
 
 After each exercise item, commit and push changes to your GitHub repository.
 
@@ -20,6 +22,14 @@ WEEK 3
 3) When sort menu is opened, show the following options "(A)-Z, (Z)-A, (O)rder entered, (R)everse order entered".
 
 4) When a sort type is selected, order the TODO list accordingly and display the results.
+
+Push and Pop
+1) When a new item is added to a TODO list, ask the user if they want to add it to the beginning or end of the list.
+Default to end if no input is given.
+
+2) Allow a user to enter F at the main menu to remove the first item on the list.
+This feature will not be added to the menu, and will be a special feature that is only available to "power users".
+Also add a L option that grabs and removes the last item in the list.
 */
 
 // Create array to hold list of todo items
@@ -42,9 +52,7 @@ function sort_menu($array) {
         krsort($array);
     }//end of reverse order entered
     return $array;
-    //display new array
-    //print_r($array);
-    //list_items($array);
+    
 }// end of sort_menu
 
 // List array items formatted for CLI
@@ -68,39 +76,43 @@ function get_input($upper = FALSE)
 // The loop!
 do {
     // Iterate through list items
-    //$key = $key + 1;
     echo list_items($items); //NEW    
 
     // Show the menu options
     echo '(N)ew item, (R)emove item, (S)ort, (Q)uit : ';
 
     // Get the input from user
-    // Use trim() to remove whitespace and newlines
-    //$input = trim(fgets(STDIN)); //OLD
     $input = get_input(TRUE); //NEW
     //$input = trim(strtoupper(fgets(STDIN));
     // Check for actionable input
     if ($input == 'N') {
+        //ask user if you want to begining or end
+        echo '(B)eggining or (E)nd of the List: ';
+        $list_placement = get_input(TRUE); //capture input
         // Ask for entry
         echo 'Enter item: ';
         // Add entry to list array
-        $items[] = get_input();
-    } elseif ($input == 'R') {
-    	//echo 'key is ' . $key . PHP_EOL;
+        $item = get_input();
+        
+        if ($list_placement == 'B') {           
+            array_unshift($items, $item); //add to beggining of the array
+        } // begining of the list
+        else{
+            array_push($items, $item); //add to the end of the array
+        } //default
+    } //end of choice N
+    elseif ($input == 'R') {
         // Remove which item?
         echo 'Enter item number to remove: ';
         // Get array key
-        //$key = trim(fgets(STDIN));
         $key = get_input();
         // Remove from array
         unset($items[$key - 1]);
     }
     elseif ($input == 'S') {
         $items = sort_menu($items);
-        // print_r($newsort);
-        // echo list_items($items);
-    }
-	$items = array_values($items);//reset keys to clean up indexes    
+    } //end of sort
+	
 // Exit when input is (Q)uit or (q)uit
 } while ($input != 'Q');
 
