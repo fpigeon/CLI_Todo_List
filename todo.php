@@ -107,7 +107,7 @@ do {
     echo list_items($items); //NEW    
 
     // Show the menu options
-    echo '(O)pen file, (N)ew item, (R)emove item, (S)ort, (Q)uit : ';
+    echo '(N)ew item, (R)emove item, (S)ort, (O)pen file, S(A)ve, (Q)uit: ';
 
     // Get the input from user
     $input = get_input(TRUE); //NEW
