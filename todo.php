@@ -34,23 +34,23 @@ Also add a L option that grabs and removes the last item in the list.
 
 
 //functions
-function open_file($filename='data/list.txt'){
-    if (is_readable($filename)){
-        if($filename = "\n"){
-            $filename='data/list.txt';    
-        } //if user just hits enter
+function open_file($filename){
+    if($filename == ''){
+        $filename='data/list.txt';    
+    } //if user just hits enter
 
+    if (is_readable($filename)){
         $handle = fopen($filename, 'r');
         $contents = fread($handle, filesize($filename));
         fclose($handle);
         //echo $contents;    
         $arrayed = explode(PHP_EOL, $contents);
-        return $arrayed;    
+        return $arrayed; 
     }//end of file found
-        else{
-            echo 'Error Reading File' . PHP_EOL;
-            return FALSE;
-        }//file not found
+    else {
+        echo 'Error Reading File' . PHP_EOL;
+        return FALSE;
+    }//file not found
 
 
     
