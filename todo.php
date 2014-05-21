@@ -34,7 +34,25 @@ Also add a L option that grabs and removes the last item in the list.
 
 
 //functions
-function save_file($filename, $list_array){
+
+function saveFile($filename, $list_array){
+    if($filename == ''){
+        $filename='data/default.txt';    
+    } //if user just hits enter
+    $handle = fopen($filename, 'w');
+    if (is_writeable($filename)){        
+        foreach ($list_array as $list_item) {
+            fwrite($handle, $list_item . PHP_EOL);
+        }//end of foreach
+        fclose($handle);
+        return TRUE;
+    } //end of ovewrite ok
+    else {
+        return FALSE;
+    } // end of else
+} //end of SaveFile
+
+/*function save_file($filename, $list_array){
     if($filename == ''){
         $filename='data/default.txt';    
     } //if user just hits enter
@@ -70,7 +88,7 @@ function save_file($filename, $list_array){
         } // end of else
     }//end of file found
     
-}//end of save file
+}//end of save file*/
 
 function open_file($filename){
     if($filename == ''){
@@ -154,14 +172,30 @@ do {
          case 'A':
             echo "Enter the path and file name: ";
             $file_path=get_input();
-            $saved = save_file($file_path, $items);
-            if ($saved){
-                echo 'File saved successfully!' . PHP_EOL;
-            }//saved success
-            else {
-                echo 'Error saving file' . PHP_EOL;
-            } 
 
+            if (file_exists($file_path)) {
+                echo "This file exists, OVERWRITE? (Y) or (N): ";
+                $overwrite = get_input(TRUE);        
+                
+                if ($overwrite == 'Y'){
+                    $saved = saveFile($file_path, $items);
+                    if ($saved){
+                        echo 'File saved successfully!' . PHP_EOL;
+                    }//saved success
+                    else {
+                        echo 'Error saving file' . PHP_EOL;
+                    } //bad save
+                } //end of Y
+             } //end of file exists
+             else {
+                $saved = saveFile($file_path, $items);
+                    if ($saved){
+                        echo 'File saved successfully!' . PHP_EOL;
+                    }//saved success
+                    else {
+                        echo 'Error saving file' . PHP_EOL;
+                    } //bad save 
+                } // end of else   
             break;
 
          case 'O':
