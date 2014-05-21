@@ -32,25 +32,36 @@ This feature will not be added to the menu, and will be a special feature that i
 Also add a L option that grabs and removes the last item in the list.
 */
 
-// Create array to hold list of todo items
-$items = array();
+
+//functions
+function open_file($filename='data/list.txt'){
+    $handle = fopen($filename, 'r');
+    $contents = fread($handle, filesize($filename));
+    //echo $contents;
+    $arrayed = explode ("\n", $contents);
+    list_items($arrayed);
+    fclose($handle);
+}//end of open file
 
 function sort_menu($array) {
     echo "(A)-Z, (Z)-A, (O)rder entered, (R)everse order entered: ";
     $input = get_input(TRUE); //capture input and UPPERCASE IT
 
-    if ($input == 'A'){
-        asort($array);
-    }//end of alphabetic
-    elseif ($input == 'Z'){
-        arsort($array);
-    }//end of reverse alphabetic
-    elseif ($input == 'O'){
-        ksort($array);
-    }//end of order entered
-    elseif ($input == 'R'){
-        krsort($array);
-    }//end of reverse order entered
+    switch ($input){
+        case 'A':
+            asort($array);
+            break; //end of alphabetic
+        case 'Z':
+            arsort($array);
+            break;
+        case 'O':
+             ksort($array);
+             break;
+        case 'R':
+            krsort($array);
+            break;
+    } //end of switch
+
     return $array;
     
 }// end of sort_menu
@@ -73,53 +84,65 @@ function get_input($upper = FALSE)
     return $upper ? strtoupper($result) : $result;    
 } //end of get_input
 
+//variables
+// Create array to hold list of todo items
+$items = array();
+
 // The loop!
 do {
     // Iterate through list items
     echo list_items($items); //NEW    
 
     // Show the menu options
-    echo '(N)ew item, (R)emove item, (S)ort, (Q)uit : ';
+    echo '(O)pen file, (N)ew item, (R)emove item, (S)ort, (Q)uit : ';
 
     // Get the input from user
     $input = get_input(TRUE); //NEW
-    //$input = trim(strtoupper(fgets(STDIN));
-    // Check for actionable input
-    if ($input == 'N') {
-        //ask user if you want to begining or end
-        echo '(B)eggining or (E)nd of the List: ';
-        $list_placement = get_input(TRUE); //capture input
-        // Ask for entry
-        echo 'Enter item: ';
-        // Add entry to list array
-        $item = get_input();
-        
-        if ($list_placement == 'B') {           
-            array_unshift($items, $item); //add to beggining of the array
-        } // begining of the list
-        else{
-            array_push($items, $item); //add to the end of the array
-        } //default
-    } //end of choice N
-    elseif ($input == 'R') {
-        // Remove which item?
-        echo 'Enter item number to remove: ';
-        // Get array key
-        $key = get_input();
-        // Remove from array
-        unset($items[$key - 1]);
-    } //end of remove item
-    elseif ($input == 'S') {
-        $items = sort_menu($items);
-    } //end of sort
-    elseif ($input == 'F') {
-        array_shift($items); //remove first index in array
-    } //end of power user delete first array item
+    
+    switch ($input) {
+         case 'O':
+            echo "Enter the path and file name: ";
+            $file_path=get_input();
+            open_file($file_path);
+            break;
 
-    elseif ($input == 'L') {
-        array_pop($items); //removes last itemin array
-    } //end of power user delete last array item
+         case 'N':
+            echo '(B)eggining or (E)nd of the List: ';
+            $list_placement = get_input(TRUE); //capture input
+            // Ask for entry
+            echo 'Enter item: ';
+            // Add entry to list array
+            $item = get_input();
 
+            if ($list_placement == 'B') {           
+                array_unshift($items, $item); //add to beggining of the array
+            } // begining of the list
+            else{
+                array_push($items, $item); //add to the end of the array
+            }// end of default 
+            break;
+         
+         case 'R':
+            // Remove which item?
+            echo 'Enter item number to remove: ';
+            // Get array key
+            $key = get_input();
+            // Remove from array
+            unset($items[$key - 1]);
+            break;
+
+        case 'S':
+            $items = sort_menu($items);
+            break;
+
+        case 'F':
+            array_shift($items); //remove first index in array
+            break;
+
+        case 'L':
+            array_pop($items); //removes last itemin array
+            break;
+     } // end of switch statment
 	
 // Exit when input is (Q)uit or (q)uit
 } while ($input != 'Q');
