@@ -39,23 +39,38 @@ function save_file($filename, $list_array){
         $filename='data/default.txt';    
     } //if user just hits enter
     $handle = fopen($filename, 'w');
-    if (is_writeable($filename)){        
-        foreach ($list_array as $list_item) {
-            fwrite($handle, $list_item . PHP_EOL);
-        }//end of foreach
-        fclose($handle);
-        return TRUE;
-        //echo 'File saved successfully' . PHP_EOL;
+
+    if (file_exists($filename)) {
+        echo "This file exists, OVERWRITE? (Y) or (N): ";
+        $overwrite = get_input(TRUE);
+        
+        if ($overwrite == 'Y'){
+            if (is_writeable($filename)){        
+                foreach ($list_array as $list_item) {
+                    fwrite($handle, $list_item . PHP_EOL);
+                }//end of foreach
+                fclose($handle);
+                return TRUE;
+            } //end of end writable  
+        } //end of ovewrite ok
+            else {
+                return FALSE;
+            } //end 
+    } //end of if file exists
+    else { //file doesn't exists so go
+        if (is_writeable($filename)){        
+                foreach ($list_array as $list_item) {
+                    fwrite($handle, $list_item . PHP_EOL);
+                }//end of foreach
+            fclose($handle);
+            return TRUE;
+        } //end of ovewrite ok
+        else {
+            return FALSE;
+        } // end of else
     }//end of file found
-    else {
-        return FALSE;
-        //echo 'Error Reading File' . PHP_EOL;
-        //return FALSE;
-    }//file not found
-
-
     
-}//end of open file
+}//end of save file
 
 function open_file($filename){
     if($filename == ''){
