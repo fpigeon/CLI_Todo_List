@@ -34,6 +34,29 @@ Also add a L option that grabs and removes the last item in the list.
 
 
 //functions
+function save_file($filename, $list_array){
+    if($filename == ''){
+        $filename='data/default.txt';    
+    } //if user just hits enter
+    $handle = fopen($filename, 'w');
+    if (is_writeable($filename)){        
+        foreach ($list_array as $list_item) {
+            fwrite($handle, $list_item . PHP_EOL);
+        }//end of foreach
+        fclose($handle);
+        return TRUE;
+        //echo 'File saved successfully' . PHP_EOL;
+    }//end of file found
+    else {
+        return FALSE;
+        //echo 'Error Reading File' . PHP_EOL;
+        //return FALSE;
+    }//file not found
+
+
+    
+}//end of open file
+
 function open_file($filename){
     if($filename == ''){
         $filename='data/list.txt';    
@@ -113,6 +136,19 @@ do {
     $input = get_input(TRUE); //NEW
     
     switch ($input) {
+         case 'A':
+            echo "Enter the path and file name: ";
+            $file_path=get_input();
+            $saved = save_file($file_path, $items);
+            if ($saved){
+                echo 'File saved successfully!' . PHP_EOL;
+            }//saved success
+            else {
+                echo 'Error saving file' . PHP_EOL;
+            } 
+
+            break;
+
          case 'O':
             echo "Enter the path and file name: ";
             $file_path=get_input();
@@ -121,7 +157,7 @@ do {
                 foreach ($file_items as $list_item) {
                     array_push($items, $list_item); //add to the end of the array
                 } //end of foreach
-            } // add to the array if founf
+            } // add to the array if found
             
             break;
 
