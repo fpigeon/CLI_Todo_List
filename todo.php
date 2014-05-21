@@ -35,12 +35,25 @@ Also add a L option that grabs and removes the last item in the list.
 
 //functions
 function open_file($filename='data/list.txt'){
-    $handle = fopen($filename, 'r');
-    $contents = fread($handle, filesize($filename));
-    //echo $contents;
-    $arrayed = explode ("\n", $contents);
-    list_items($arrayed);
-    fclose($handle);
+    if (is_readable($filename)){
+        if($filename = "\n"){
+            $filename='data/list.txt';    
+        } //if user just hits enter
+
+        $handle = fopen($filename, 'r');
+        $contents = fread($handle, filesize($filename));
+        fclose($handle);
+        //echo $contents;    
+        $arrayed = explode(PHP_EOL, $contents);
+        return $arrayed;    
+    }//end of file found
+        else{
+            echo 'Error Reading File' . PHP_EOL;
+            return FALSE;
+        }//file not found
+
+
+    
 }//end of open file
 
 function sort_menu($array) {
@@ -103,7 +116,13 @@ do {
          case 'O':
             echo "Enter the path and file name: ";
             $file_path=get_input();
-            open_file($file_path);
+            $file_items = open_file($file_path);
+            if ($file_items !== FALSE){
+                foreach ($file_items as $list_item) {
+                    array_push($items, $list_item); //add to the end of the array
+                } //end of foreach
+            } // add to the array if founf
+            
             break;
 
          case 'N':
